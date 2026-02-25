@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+  SHORT_COMMIT = ""
+}
        triggers {
         pollSCM "* * * * *"
        }
@@ -55,11 +58,11 @@ pipeline {
             }
         }
         stage('Remove local images') {
-            steps {
-                echo '=== Delete the local docker images ==='
-                sh("docker rmi -f bdaubs/petclinic-spinnaker-jenkins:latest || :")
-                sh("docker rmi -f bdaubs/petclinic-spinnaker-jenkins:$SHORT_COMMIT || :")
-            }
-        }
+  steps {
+    echo '=== Delete the local docker images ==='
+    sh("docker rmi -f bdaubs/petclinic-spinnaker-jenkins:latest || :")
+    sh('if [ -n "$SHORT_COMMIT" ]; then docker rmi -f bdaubs/petclinic-spinnaker-jenkins:$SHORT_COMMIT || :; fi')
+  }
+}
     }
 }
