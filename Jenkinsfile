@@ -23,8 +23,11 @@ pipeline {
         }
         stage('Build Docker Image') {
             when {
-                branch 'master'
-            }
+  anyOf {
+    branch 'master'
+    environment name: 'GIT_BRANCH', value: 'origin/master'
+  }
+}
             steps {
                 echo '=== Building Petclinic Docker Image ==='
                 script {
@@ -34,8 +37,11 @@ pipeline {
         }
         stage('Push Docker Image') {
             when {
-                branch 'master'
-            }
+  anyOf {
+    branch 'master'
+    environment name: 'GIT_BRANCH', value: 'origin/master'
+  }
+}
             steps {
                 echo '=== Pushing Petclinic Docker Image ==='
                 script {
